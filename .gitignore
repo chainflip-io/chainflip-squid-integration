@@ -1,0 +1,12 @@
+__pycache__
+.history
+.hypothesis/
+build/
+.idea/
+.vscode/
+node_modules/
+.env
+@openzeppelin/
+crytic-export/
+echidna-test
+cache/
