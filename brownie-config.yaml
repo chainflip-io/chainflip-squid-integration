@@ -1,0 +1,21 @@
+# Use Ganache's network as the default
+networks:
+  default: development
+
+# Require OpenZeppelin Contracts
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.0.0
+
+compiler:
+  evm_version: "london"
+  solc:
+    optimizer:
+      enabled: true
+      runs: 1600
+    version: 0.8.19
+    # Path remapping to support OpenZeppelin imports with NPM-style path
+    remappings:
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.0.0"
+
+hypothesis:
+  max_examples: 50
