@@ -20,9 +20,9 @@ My understanding is that there are at least points of integration.
 
 - Integrating the calls `xSwapNative` and `xSwapToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
 
-  A) Integrate us at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
+    **A)** Integrate us at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
 
-  B) On our call you mentioned that another option is just integrating on the backend and use `fundAndRunMulticall()` to do the call to Chainflip. As we discussed, it would be interesting to do gas comparisons between those two options in order to figure out what is best. This estimations could be done right now just by calling axelar via `bridgeCall()` or `fundAndRunMulticall()`. It should be cheaper via the former but I'm not sure how much cheaper.
+    **B)** On our call you mentioned that another option is just integrating on the backend and use `fundAndRunMulticall()` to do the call to Chainflip. As we discussed, it would be interesting to do gas comparisons between those two options in order to figure out what is best. This estimations could be done right now just by calling axelar via `bridgeCall()` or `fundAndRunMulticall()`. It should be cheaper via the former but I'm not sure how much cheaper.
 
 
 ## Dependencies
