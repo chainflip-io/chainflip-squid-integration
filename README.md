@@ -16,7 +16,7 @@ These are the relevant functions for the integration with Squid:
 
 My understanding is that there are at least points of integration.
 
-- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. An example of a receiver contract is in the repository with the name `CFReceiver.sol` to get inspiration.
+- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol` and example of the minimal receiving logic is in the repository with the name `CFReceiver.sol`.
 
 - Integrating the calls `xSwapNative` and `xSwapToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
 
