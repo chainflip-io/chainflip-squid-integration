@@ -10,17 +10,17 @@ These are the relevant functions for the integration with Squid:
 - `xCallNative` - General message passing ingress
 - `xCallToken`  - General message passing ingress
 
-- `executexSwapAndCall` - Egressing native swap tokens. the CFReceive interface is expected.
-- `executexCall` - General message passing egress
+- `executexSwapAndCall` - Egressing native swap tokens. The `cfReceive` interface is expected.
+- `executexCall` - General message passing egress. The `cfReceivexCall` interface is expected.
 
 
-My understanding is that there are at least points of integration.
+My understanding is that there are several points of integration.
 
-- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol` and example of the minimal receiving logic is in the repository with the name `CFReceiver.sol`.
+- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol` and an example of the minimal receiving logic is in the repository with the name `CFReceiver.sol`.
 
 - Integrating the calls `xSwapNative` and `xSwapToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
 
-    **A)** Integrate us at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
+    **A)** Integrate Chainflip at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
 
     **B)** On our call you mentioned that another option is just integrating on the backend and use `fundAndRunMulticall()` to do the call to Chainflip. As we discussed, it would be interesting to do gas comparisons between those two options in order to figure out what is best. This estimations could be done right now just by calling axelar via `bridgeCall()` or `fundAndRunMulticall()`. It should be cheaper via the former but I'm not sure how much cheaper.
 
