@@ -5,10 +5,10 @@ This repository contains the Vault smart contract which is used to handle deposi
 There is a couple of simplifications (added as notes in the code) because we have a KeyManager contract that holds addresses and keys and performs signature verification. That requires a bunch of dependencies. Instead, I have just added the addresses to the Vault and commented out the signature verification call. This way the repository is greatly simplified.
 
 These are the relevant functions for the integration with Squid:
-- `xSwapNative` - Start a cross-chain swap providing the native token
-- `xSwapToken`  - Start a cross-chain swap providing an ERC20 token
-- `xCallNative` - General message passing ingress
-- `xCallToken`  - General message passing ingress
+- `xSwapNative` - Start a cross-chain swap providing the native token with no message passing.
+- `xSwapToken`  - Start a cross-chain swap providing an ERC20 token with no message passing.
+- `xCallNative` - Start a cross-chain swap providing the native token with message passing.
+- `xCallToken`  - Start a cross-chain swap providing an ERC20 token with message passing.
 
 - `executexSwapAndCall` - Egressing native swap tokens. The `cfReceive` interface is expected.
 - `executexCall` - General message passing egress. The `cfReceivexCall` interface is expected.
@@ -16,9 +16,9 @@ These are the relevant functions for the integration with Squid:
 
 My understanding is that there are several points of integration.
 
-- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol` and an example of the minimal receiving logic is in the repository with the name `CFReceiver.sol`.
+- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol`, a baseline for an example contract is `CFReceiver.sol` and an example of an implemented receiver is `CFReceiverMock.sol` .
 
-- Integrating the calls `xSwapNative` and `xSwapToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
+- Integrating the calls `xSwapNative`, `xSwapToken`,`xCallNative`,`xCallToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
 
     **A)** Integrate Chainflip at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
 
