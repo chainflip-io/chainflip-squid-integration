@@ -9,4 +9,4 @@ I am adding here are some extra clarifications for those interfaces in case you 
 - `message` => This is the message that will be passed from the source chain to the destination chain as part of the call to the receiver. This must be abi encoded.
 - `gasAmount` in `xCallNative` and `xCallToken` => This is the amount that should be used to pay for gas on the destination chain. This will be able to be estimated via Chainflip's SDK.
 - `cfParameters` => It will be used for future functionality in the protocol. For now this is not used and shall be set to zero.
-- As you can see, there is no check in any of the calls for valid supported tokens nor chains. That check is done in the witnessing side of the Chainflip's protocol. This is basically to decrease the on-chain overhead of each swaps.
+- As you can see, there is no check in any of the calls for valid supported tokens nor chains. That check is done in the witnessing side of the Chainflip's protocol. This is basically to decrease the on-chain overhead of each swap.

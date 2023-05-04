@@ -13,7 +13,7 @@ These are the relevant functions for the integration with Squid:
 - `executexSwapAndCall` - Egressing native swap tokens with a message. The `cfReceive` interface is expected.
 - `executexCall` - General message passing egress without token. The `cfReceivexCall` interface is expected.
 
-Althought most of those function calls are straightforward, you will find an example of each of them under the tests directory.
+Althought most of those function calls are straightforward, you will find an example of each of them under the tests directory. You will also find another README file with some clarifications under that same directory.
 
 When it comes to the integration, my understanding is that there are several points of integration.
 
