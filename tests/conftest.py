@@ -1,5 +1,6 @@
 import pytest
 from brownie.network import priority_fee
+from params import *
 
 # Test isolation
 @pytest.fixture(autouse=True)
@@ -9,7 +10,7 @@ def isolation(fn_isolation):
 
 # Deploy the contracts for repeated tests without having to redeploy each time
 @pytest.fixture(scope="module")
-def cf(a, Vault, CFReceiverMock, Token):
+def cf(a, Vault, CFReceiver, Token):
     priority_fee("1 gwei")
 
     cf.deployer = a[0]
@@ -19,33 +20,16 @@ def cf(a, Vault, CFReceiverMock, Token):
     cf.DENICE = a[4]
 
     cf.vault = cf.deployer.deploy(Vault, cf.ALICE, cf.BOB, cf.CHARLIE)
-    cf.cfReceiver = cf.deployer.deploy(CFReceiverMock, cf.vault.address)
+    cf.cfReceiver = cf.deployer.deploy(CFReceiver, cf.vault.address)
     cf.token = cf.deployer.deploy(Token)
-
-    return cf
-
-
-@pytest.fixture(scope="module")
-def example_parameters(cf):
-    dstChain = 0
-    dstToken = 1
-    dstAddress = str(cf.DENICE)
-    amountToSwap = 1000
+    cf.cfReceiver = cf.deployer.deploy(CFReceiver, cf.vault.address)
 
     # For example encode a token transfer for the egress chain to decode
-    message = cf.token.transfer.encode_input(cf.BOB, amountToSwap)
+    cf.message = cf.token.transfer.encode_input(evm_dstAddress, amountOutputSwap)
+    cf.nonevm_dstAddress = cf.vault.encode_string(nonevm_dstAddress)
 
-    # Arbitrary gas amount for the egress chain to use - CF SDK will help with this
-    gasAmount = amountToSwap / 100
-    refundAddress = str(cf.deployer)
+    # Fund the vault for the destination chain to tests
+    cf.token.transfer(cf.vault, amountOutputSwap, {"from": cf.deployer})
+    cf.deployer.transfer(cf.vault, amountOutputSwap)
 
-    # Return all parameters
-    return (
-        dstChain,
-        dstToken,
-        dstAddress,
-        amountToSwap,
-        message,
-        gasAmount,
-        refundAddress,
-    )
+    return cf

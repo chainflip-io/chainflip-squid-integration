@@ -3,26 +3,34 @@ pragma solidity ^0.8.0;
 import "../interfaces/ICFReceiver.sol";
 
 /**
- * @title    CFReceiver
+ * @title    CFReceiver Example
  * @dev      This abstract contract is the base implementation for a smart contract
  *           capable of receiving cross-chain swaps and calls from the Chainflip Protocol.
  *           It has a check to ensure that the functions can only be called by one
  *           address, which should be the Chainflip Protocol. This way it is ensured that
  *           the receiver will be sent the amount of tokens passed as parameters and
  *           that the cross-chain call originates from the srcChain and address specified.
- *           This contract should be inherited and then user's logic should be implemented
- *           as the internal functions (_cfReceive and _cfReceivexCall).
  *           Remember that anyone on the source chain can use the Chainflip Protocol
  *           to make a cross-chain call to this contract. If that is not desired, an extra
  *           check on the source address and source chain should be performed.
  */
 
-abstract contract CFReceiver is ICFReceiver {
+contract CFReceiver is ICFReceiver {
+    event ReceivedxSwapAndCall(
+        uint32 srcChain,
+        bytes srcAddress,
+        bytes message,
+        address token,
+        uint256 amount
+    );
+
+    event ReceivedxCall(uint32 srcChain, bytes srcAddress, bytes message);
+
     /// @dev The address used to indicate whether the funds received are native or a token
     address private constant _NATIVE_ADDR =
         0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
-    /// @dev    Chainflip's Vault address where xSwaps and xCalls will be originated from.
+    /// @dev    Chainflip's Vault address where _cfReceive and _cfReceivexCall will originate from
     address public cfVault;
     address public owner;
 
@@ -53,7 +61,14 @@ abstract contract CFReceiver is ICFReceiver {
         address token,
         uint256 amount
     ) external payable override onlyCfVault {
-        _cfReceive(srcChain, srcAddress, message, token, amount);
+        // Writing assertions here just to make a statement
+        if (token == _NATIVE_ADDR) {
+            assert(msg.value == amount);
+        } else {
+            // Asserting here just to highlight this
+            assert(msg.value == 0);
+        }
+        emit ReceivedxSwapAndCall(srcChain, srcAddress, message, token, amount);
     }
 
     /**
@@ -68,30 +83,8 @@ abstract contract CFReceiver is ICFReceiver {
         bytes calldata srcAddress,
         bytes calldata message
     ) external override onlyCfVault {
-        _cfReceivexCall(srcChain, srcAddress, message);
+        emit ReceivedxCall(srcChain, srcAddress, message);
     }
-
-    //////////////////////////////////////////////////////////////
-    //                                                          //
-    //             User's logic to be implemented               //
-    //                                                          //
-    //////////////////////////////////////////////////////////////
-
-    /// @dev Internal function to be overriden by the user's logic.
-    function _cfReceive(
-        uint32 srcChain,
-        bytes calldata srcAddress,
-        bytes calldata message,
-        address token,
-        uint256 amount
-    ) internal virtual;
-
-    /// @dev Internal function to be overriden by the user's logic.
-    function _cfReceivexCall(
-        uint32 srcChain,
-        bytes calldata srcAddress,
-        bytes calldata message
-    ) internal virtual;
 
     //////////////////////////////////////////////////////////////
     //                                                          //

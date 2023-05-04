@@ -29,24 +29,6 @@ interface IVault is IGovernanceCommunityGuarded {
         uint256 amount;
     }
 
-    /**
-     * @param swapID    The unique identifier for this swap (bytes32), used for create2
-     * @param token     The token to be transferred
-     */
-    struct DeployFetchParams {
-        bytes32 swapID;
-        address token;
-    }
-
-    /**
-     * @param fetchContract   The address of the deployed Deposit contract
-     * @param token     The token to be transferred
-     */
-    struct FetchParams {
-        address payable fetchContract;
-        address token;
-    }
-
     //////////////////////////////////////////////////////////////
     //                                                          //
     //                          Transfers                       //
@@ -74,13 +56,15 @@ interface IVault is IGovernanceCommunityGuarded {
         bytes calldata dstAddress,
         uint32 dstToken,
         IERC20 srcToken,
-        uint256 amount
+        uint256 amount,
+        bytes calldata cfParameters
     ) external;
 
     function xSwapNative(
         uint32 dstChain,
         bytes calldata dstAddress,
-        uint32 dstToken
+        uint32 dstToken,
+        bytes calldata cfParameters
     ) external payable;
 
     //////////////////////////////////////////////////////////////
@@ -95,7 +79,7 @@ interface IVault is IGovernanceCommunityGuarded {
         uint32 dstToken,
         bytes calldata message,
         uint256 gasAmount,
-        bytes calldata refundAddress
+        bytes calldata cfParameters
     ) external payable;
 
     function xCallToken(
@@ -106,7 +90,7 @@ interface IVault is IGovernanceCommunityGuarded {
         uint256 gasAmount,
         IERC20 srcToken,
         uint256 amount,
-        bytes calldata refundAddress
+        bytes calldata cfParameters
     ) external;
 
     //////////////////////////////////////////////////////////////

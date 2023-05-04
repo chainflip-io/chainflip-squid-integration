@@ -13,8 +13,9 @@ These are the relevant functions for the integration with Squid:
 - `executexSwapAndCall` - Egressing native swap tokens with a message. The `cfReceive` interface is expected.
 - `executexCall` - General message passing egress without token. The `cfReceivexCall` interface is expected.
 
+Althought most of those function calls are straightforward, you will find an example of each of them under the tests directory.
 
-My understanding is that there are several points of integration.
+When it comes to the integration, my understanding is that there are several points of integration.
 
 - Squid adding support for `cfReceive`  to receive the egress calls with tokens from Chainflip. This is analogous to Axelar's `executeWithToken`. I am not sure if you also aim to support pure general message passing via `cfReceivexCall`
 as I don't seem to see Axelar's `execute` being implemented. Anyway, the expected interface is defined in `ICFReceiver.sol`, a baseline for an example contract is `CFReceiver.sol` and an example of an implemented receiver is `CFReceiverMock.sol`.

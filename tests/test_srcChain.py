@@ -1,116 +1,106 @@
-# Initiate a cross-chain swap of a native token (provided by the user/Squid) 
+from params import *
+
+# An EVM address should be used when swapping to an EVM chain (e.g. evm_dstAddress)
+# An abi.encoded address should be used when swapping to a non-EVM compatible
+# chain (e.g. nonevm_dstAddress). Here we are showcasing both arbitrarily.
+
+# Initiate a cross-chain swap of a native token (provided by the user/Squid)
 # without cross-chain messaging.
-def test_example_xSwapNative(cf, example_parameters):
-    dstChain, dstToken, dstAddress, amountToSwap, _, _, _ = example_parameters
+def test_example_xSwapNative(cf):
     # xSwapNative
     tx = cf.vault.xSwapNative(
-        dstChain, dstAddress, dstToken, {"value": amountToSwap, "from": cf.deployer}
+        dstChain,
+        evm_dstAddress,
+        dstToken,
+        cfParameters,
+        {"value": amountToSwap, "from": cf.deployer},
     )
 
     assert tx.events["SwapNative"][0].values() == [
         dstChain,
-        dstAddress,
+        evm_dstAddress,
         dstToken,
         amountToSwap,
         cf.deployer,
+        cfParameters,
     ]
 
-# Initiate a cross-chain swap of Chainflip supported ERC20 token (provided by the 
+
+# Initiate a cross-chain swap of Chainflip supported ERC20 token (provided by the
 # user/Squid) without cross-chain messaging.
-def test_example_xSwapToken(cf, example_parameters):
-    dstChain, dstToken, dstAddress, amountToSwap, _, _, _ = example_parameters
+def test_example_xSwapToken(cf):
 
     # xSwapToken
     cf.token.approve(cf.vault, amountToSwap, {"from": cf.deployer})
     tx = cf.vault.xSwapToken(
         dstChain,
-        dstAddress,
+        cf.nonevm_dstAddress,
         dstToken,
         cf.token.address,
         amountToSwap,
+        cfParameters,
         {"from": cf.deployer},
     )
 
     assert tx.events["SwapToken"][0].values() == [
         dstChain,
-        dstAddress,
+        cf.nonevm_dstAddress,
         dstToken,
         cf.token.address,
         amountToSwap,
         cf.deployer,
+        cfParameters,
     ]
 
-# Initiate a cross-chain swap of a native token (provided by the user/Squid) 
+
+# Initiate a cross-chain swap of a native token (provided by the user/Squid)
 # with cross-chain messaging triggering a call on the destination chain.
-def test_example_xCallNative(cf, example_parameters):
-
-    (
-        dstChain,
-        dstToken,
-        dstAddress,
-        amountToSwap,
-        message,
-        gasAmount,
-        refundAddress,
-    ) = example_parameters
-
+def test_example_xCallNative(cf):
     tx = cf.vault.xCallNative(
         dstChain,
-        dstAddress,
+        cf.nonevm_dstAddress,
         dstToken,
-        message,
+        cf.message,
         gasAmount,
-        refundAddress,
+        cfParameters,
         {"value": amountToSwap, "from": cf.deployer},
     )
     assert tx.events["XCallNative"][0].values() == [
         dstChain,
-        dstAddress,
+        cf.nonevm_dstAddress,
         dstToken,
         amountToSwap,
         cf.deployer,
-        message,
+        cf.message,
         gasAmount,
-        refundAddress,
+        cfParameters,
     ]
 
-# Initiate a cross-chain swap of a chainflip supporoted ERC-20 token 
-# (provided by the user/Squid) with cross-chain messaging triggering 
-# a call on the destination chain.
-def test_example_xCallToken(cf, example_parameters):
-    (
-        dstChain,
-        dstToken,
-        dstAddress,
-        amountToSwap,
-        message,
-        gasAmount,
-        refundAddress,
-    ) = example_parameters
 
+# Initiate a cross-chain swap of a chainflip supporoted ERC-20 token
+# (provided by the user/Squid) with cross-chain messaging triggering
+# a call on the destination chain.
+def test_example_xCallToken(cf):
     cf.token.approve(cf.vault, amountToSwap, {"from": cf.deployer})
     tx = cf.vault.xCallToken(
         dstChain,
-        dstAddress,
+        evm_dstAddress,
         dstToken,
-        message,
+        cf.message,
         gasAmount,
         cf.token.address,
         amountToSwap,
-        refundAddress,
+        cfParameters,
         {"from": cf.deployer},
     )
     assert tx.events["XCallToken"][0].values() == [
         dstChain,
-        dstAddress,
+        evm_dstAddress,
         dstToken,
         cf.token.address,
         amountToSwap,
         cf.deployer,
-        message,
+        cf.message,
         gasAmount,
-        refundAddress,
+        cfParameters,
     ]
-
-
-# TODO: CFReceieve Mock tests
