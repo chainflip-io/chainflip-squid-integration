@@ -2,7 +2,7 @@
 
 This repository contains the Vault smart contract which is used to handle deposits and withdrawals based on signatures submitted via the vault nodes.
 
-There is a couple of simplifications (added as notes in the code) because we have a KeyManager contract that holds addresses and keys and performs signature verification. That requires a bunch of dependencies. Instead, I have just added the addresses to the Vault and commented out the signature verification call. This way the repository is greatly simplified.
+There is a couple of simplifications in the Vault (added as notes in the code) because we have a KeyManager contract that holds addresses and keys and performs signature verification. That requires a bunch of dependencies. Instead, I have just added the addresses to the Vault and commented out the signature verification call. This way the repository is greatly simplified.
 
 These are the relevant functions for the integration with Squid:
 - `xSwapNative` - Start a cross-chain swap providing the native token with no message passing.
@@ -24,6 +24,7 @@ as I don't seem to see Axelar's `execute` being implemented. Anyway, the expecte
     **A)** Integrate Chainflip at the same level as Axelar, as in `_bridgeCall()` (aka hardcoded calls in the contract).
 
     **B)** On our call you mentioned that another option is just integrating on the backend and use `fundAndRunMulticall()` to do the call to Chainflip. As we discussed, it would be interesting to do gas comparisons between those two options in order to figure out what is best. This estimations could be done right now just by calling axelar via `bridgeCall()` or `fundAndRunMulticall()`. It should be cheaper via the former but I'm not sure how much cheaper.
+
 
 
 ## Dependencies
