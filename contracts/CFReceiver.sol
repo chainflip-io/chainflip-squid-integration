@@ -1,6 +1,6 @@
 pragma solidity ^0.8.0;
 
-import "../interfaces/ICFReceiver.sol";
+import "./interfaces/ICFReceiver.sol";
 
 /**
  * @title    CFReceiver Example
