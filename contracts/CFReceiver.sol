@@ -4,7 +4,7 @@ import "./interfaces/ICFReceiver.sol";
 
 /**
  * @title    CFReceiver Example
- * @dev      This abstract contract is the base implementation for a smart contract
+ * @dev      This contract is the base implementation for a smart contract
  *           capable of receiving cross-chain swaps and calls from the Chainflip Protocol.
  *           It has a check to ensure that the functions can only be called by one
  *           address, which should be the Chainflip Protocol. This way it is ensured that
@@ -12,7 +12,7 @@ import "./interfaces/ICFReceiver.sol";
  *           that the cross-chain call originates from the srcChain and address specified.
  *           Remember that anyone on the source chain can use the Chainflip Protocol
  *           to make a cross-chain call to this contract. If that is not desired, an extra
- *           check on the source address and source chain should be performed.
+ *           check on the source address and source chain should be implemented.
  */
 
 contract CFReceiver is ICFReceiver {
