@@ -23,3 +23,29 @@ def cf(a, Vault, CFReceiverMock, Token):
     cf.token = cf.deployer.deploy(Token)
 
     return cf
+
+
+@pytest.fixture(scope="module")
+def example_parameters(cf):
+    dstChain = 0
+    dstToken = 1
+    dstAddress = str(cf.DENICE)
+    amountToSwap = 1000
+
+    # For example encode a token transfer for the egress chain to decode
+    message = cf.token.transfer.encode_input(cf.BOB, amountToSwap)
+
+    # Arbitrary gas amount for the egress chain to use - CF SDK will help with this
+    gasAmount = amountToSwap / 100
+    refundAddress = str(cf.deployer)
+
+    # Return all parameters
+    return (
+        dstChain,
+        dstToken,
+        dstAddress,
+        amountToSwap,
+        message,
+        gasAmount,
+        refundAddress,
+    )

@@ -5,12 +5,8 @@
 #    - `gasAmount in `xCallNative` and `xCallToken` will be able to be estimated via the SDK.
 
 
-def test_example_xSwap(cf):
-    dstChain = 0
-    dstToken = 1
-    dstAddress = str(cf.DENICE)
-    amountToSwap = 1000
-
+def test_example_xSwapNative(cf, example_parameters):
+    dstChain, dstToken, dstAddress, amountToSwap, _, _, _ = example_parameters
     # xSwapNative
     tx = cf.vault.xSwapNative(
         dstChain, dstAddress, dstToken, {"value": amountToSwap, "from": cf.deployer}
@@ -23,6 +19,10 @@ def test_example_xSwap(cf):
         amountToSwap,
         cf.deployer,
     ]
+
+
+def test_example_xSwapToken(cf, example_parameters):
+    dstChain, dstToken, dstAddress, amountToSwap, _, _, _ = example_parameters
 
     # xSwapToken
     cf.token.approve(cf.vault, amountToSwap, {"from": cf.deployer})
@@ -45,19 +45,17 @@ def test_example_xSwap(cf):
     ]
 
 
-def test_example_xCall(cf):
+def test_example_xCallNative(cf, example_parameters):
 
-    dstChain = 0
-    dstToken = 1
-    dstAddress = str(cf.DENICE)
-    amountToSwap = 1000
-
-    # For example encode a token transfer for the egress chain to decode
-    message = cf.token.transfer.encode_input(cf.BOB, amountToSwap)
-
-    # Arbitrary gas amount for the egress chain to use - CF SDK will help with this
-    gasAmount = amountToSwap / 100
-    refundAddress = str(cf.deployer)
+    (
+        dstChain,
+        dstToken,
+        dstAddress,
+        amountToSwap,
+        message,
+        gasAmount,
+        refundAddress,
+    ) = example_parameters
 
     tx = cf.vault.xCallNative(
         dstChain,
@@ -78,6 +76,18 @@ def test_example_xCall(cf):
         gasAmount,
         refundAddress,
     ]
+
+
+def test_example_xCallToken(cf, example_parameters):
+    (
+        dstChain,
+        dstToken,
+        dstAddress,
+        amountToSwap,
+        message,
+        gasAmount,
+        refundAddress,
+    ) = example_parameters
 
     cf.token.approve(cf.vault, amountToSwap, {"from": cf.deployer})
     tx = cf.vault.xCallToken(

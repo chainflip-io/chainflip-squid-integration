@@ -35,10 +35,4 @@ interface ICFReceiver {
         bytes calldata srcAddress,
         bytes calldata message
     ) external;
-
-    /**
-     * @notice           Update Chanflip's Vault address.
-     * @param cfVault    New Chainflip's Vault address.
-     */
-    function updateCfVault(address cfVault) external;
 }

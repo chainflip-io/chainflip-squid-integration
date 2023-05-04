@@ -10,13 +10,14 @@ These are the relevant functions for the integration with Squid:
 - `xCallNative` - Start a cross-chain swap providing the native token with message passing.
 - `xCallToken`  - Start a cross-chain swap providing an ERC20 token with message passing.
 
-- `executexSwapAndCall` - Egressing native swap tokens. The `cfReceive` interface is expected.
-- `executexCall` - General message passing egress. The `cfReceivexCall` interface is expected.
+- `executexSwapAndCall` - Egressing native swap tokens with a message. The `cfReceive` interface is expected.
+- `executexCall` - General message passing egress without token. The `cfReceivexCall` interface is expected.
 
 
 My understanding is that there are several points of integration.
 
-- Squid adding support for `cfReceive` and `cfReceivexCall` to receive the egress calls from Chainflip. This is analogous to Axelar's `execute` and `executeWithToken`. The expected interface is defined in `ICFReceiver.sol`, a baseline for an example contract is `CFReceiver.sol` and an example of an implemented receiver is `CFReceiverMock.sol` .
+- Squid adding support for `cfReceive`  to receive the egress calls with tokens from Chainflip. This is analogous to Axelar's `executeWithToken`. I am not sure if you also aim to support pure general message passing via `cfReceivexCall`
+as I don't seem to see Axelar's `execute` being implemented. Anyway, the expected interface is defined in `ICFReceiver.sol`, a baseline for an example contract is `CFReceiver.sol` and an example of an implemented receiver is `CFReceiverMock.sol`.
 
 - Integrating the calls `xSwapNative`, `xSwapToken`,`xCallNative`,`xCallToken` to be able to initiate swaps through the Chainflip Vault. There are two options for that:
 
